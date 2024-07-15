@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <style>
+        * {
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .bg, .pg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            z-index: -1;
+        }
+
+        .bg {
+            background-image: url("https://as1.ftcdn.net/v2/jpg/07/15/46/98/1000_F_715469847_Pz8Z4KYshrGcsVLyJH3ZbzAf7VapivUe.jpg");
+        }
+
+        .pg {
+            background-image: url("https://img.freepik.com/free-vector/interior-living-room-scene-background_1308-45472.jpg?t=st=1719937977~exp=1719941577~hmac=22b21b47fcd37175cf876a2519d7a7029d6ced1dc26840eb76f5fbc0561fa792&w=826");
+            display: none;
+        }
+
+        body {
+           height:100%;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            padding: 5px;
+            border: thin;
+            color: pink;
+            background-color: rgba(0, 128, 0, 0.7);
+            display: inline-block;
+        }
+
+        #welcome-page, #pet-page {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        #pet-selection {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .pet-option {
+            width: 150px;
+            height: 150px;
+            background-color: #f2f2f2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin: 20px;
+            font-size: 60px;
+            transition: transform 0.3s;
+        }
+
+        .pet-option:hover {
+            transform: scale(1.1);
+        }
+
+        #pet {
+            width: 200px;
+            height: 200px;
+            background-color: #f2f2f2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            font-size: 100px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        #pet img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+
+        #status, #rooms {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .attribute, .room {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px;
+		
+        }
+		.attribute span {
+    color: white;
+    font-weight: bold;
+}
+
+        .attribute i, .room-icon {
+            font-size: 40px;
+            margin-bottom: 5px;
+        }
+
+        .room-icon {
+            width: 100px;
+            height: 100px;
+            background-color: #f2f2f2;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-weight: bold;
+			color:white;
+        }
+
+        @media (max-width: 600px) {
+            #status, #rooms {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        h2 {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg"></div>
+    <div class="pg"></div>
+    <div class="content">
+        <div id="welcome-page">
+            <h1>Welcome to Your Pet's World</h1>
+            <h2>Choose Your Pet</h2>
+            
+            <div id="pet-selection">
+                <div class="pet-option" onclick="selectPet('🐶')"><i class="fas fa-dog"></i></div>
+                <div class="pet-option" onclick="selectPet('🐱')"><i class="fas fa-cat"></i></div>
+                <div class="pet-option" onclick="selectPet('🐰')"><i class="fas fa-rabbit"></i></div>
+            </div>
+        </div>
+        
+        <div id="pet-page" style="display: none;">
+            <h1>Your Pet's World</h1>
+            <div id="pet" onclick="playPetSound()"></div>
+            <div id="status">
+                <div class="attribute">
+                    <i class="fas fa-drumstick-bite"></i>
+                    <span id="hunger">50</span>
+                </div>
+                <div class="attribute">
+                    <i class="fas fa-laugh-beam"></i>
+                    <span id="happiness">50</span>
+                </div>
+                <div class="attribute">
+                    <i class="fas fa-battery-half"></i>
+                    <span id="energy">50</span>
+                </div>
+            </div>
+            <div id="rooms">
+                <div class="room">
+                    <div class="room-icon" onclick="goToRoom('kitchen')">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="room-label">Kitchen</div>
+                </div>
+                <div class="room">
+                    <div class="room-icon" onclick="goToRoom('park')">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <div class="room-label">Park</div>
+                </div>
+                <div class="room">
+                    <div class="room-icon" onclick="goToRoom('bedroom')">
+                        <i class="fas fa-bed"></i>
+                    </div>
+                    <div class="room-label">Bedroom</div>
+                </div>
+            </div>
+            <div id="message"></div>
+        </div>
+    </div>
+
+    <audio id="dogSound" src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_76b78a61b4.mp3?filename=small-dog-barking-84707.mp3"></audio>
+    <audio id="catSound" src="https://cdn.pixabay.com/download/audio/2022/03/20/audio_bf3770baf2.mp3?filename=cat-98721.mp3"></audio>
+    <audio id="rabbitSound" src="https://cdn.pixabay.com/download/audio/2023/03/26/audio_05632af90f.mp3?filename=boing-spring-mouth-harp-04-20-13-4-103346.mp3"></audio>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script>
+        let hunger = 50;
+        let happiness = 50;
+        let energy = 50;
+        let selectedPet = '';
+        let isEating = false;
+        let isPlaying = false;
+        let isSleeping = false;
+
+        const hungerElement = document.querySelector('#hunger');
+        const happinessElement = document.querySelector('#happiness');
+        const energyElement = document.querySelector('#energy');
+        const messageElement = document.querySelector('#message');
+        const petElement = document.querySelector('#pet');
+
+        function selectPet(pet) {
+            selectedPet = pet;
+            document.getElementById('welcome-page').style.display = 'none';
+            document.getElementById('pet-page').style.display = 'block';
+            document.querySelector('.bg').style.display = 'none';
+            document.querySelector('.pg').style.display = 'block';
+            updatePetDisplay();
+            updateAttributes();
+        }
+
+        function updatePetDisplay() {
+            if (selectedPet === '🐱' && isEating) {
+                petElement.innerHTML = '<img src="https://media.tenor.com/qYYeQ6hkWmYAAAAj/popcorn-pop-corn.gif" alt="Cat eating">';
+            } else if (selectedPet === '🐶' && isEating) {
+                petElement.innerHTML = '<img src="https://ugokawaii.com/wp-content/uploads/2023/01/eat-fish.gif" alt="dog is eating">';
+            } else if (selectedPet === '🐰' && isEating) {
+                petElement.innerHTML = '<img src="https://i.pinimg.com/originals/a8/9d/04/a89d04eb97e6f945f5781ba5ff2df93d.gif" alt="rabbit is eating">';
+            } else {
+                petElement.innerHTML = selectedPet;
+            }
+        }
+
+        function updatepark() {
+            if (selectedPet === '🐱' && isPlaying) {
+                petElement.innerHTML = '<img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExaDRoeDl3NXFmN2xmb20wMXk2b2o0OHMzcXBkMjluNmNianMyZm51NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xTiTnmTVjIRxoiPs9q/giphy.webp" alt="cat playing">';
+            } else if (selectedPet === '🐶' && isPlaying) {
+                petElement.innerHTML = '<img src="https://cdn.dribbble.com/users/79996/screenshots/1457470/media/aa3d53d76df7b007f546d7cab1258deb.gif">';
+            } else if (selectedPet === '🐰' && isPlaying) {
+                petElement.innerHTML = '<img src="https://cdn.dribbble.com/users/3330/screenshots/424693/jump-dribbble.gif" alt="rabbit playing">';
+            } else {
+                petElement.innerHTML = selectedPet;
+            }
+        }
+
+        function updatesleep() {
+            if (selectedPet === '🐱' && isSleeping) {
+                petElement.innerHTML = '<img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXg0OHMwNWVhMjhndTN3ODJxYnlxdHo0MnFkcTN5dDAxeHd6ZTJvOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/wLNZM3YcdZ640bSk4j/giphy.webp" alt="cat sleeping">';
+            } else if (selectedPet === '🐶' && isSleeping) {
+                petElement.innerHTML = '<img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDh5bTRzeTR5YnRiYjVsYzhnanRxenJ4ZXhvanFsbWRoa2VlYzYwcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/VUoc4lJB6rH4j2kJ9s/giphy.webp" alt="dog sleeping">';
+            } else if (selectedPet === '🐰' && isSleeping) {
+                petElement.innerHTML = '<img src="https://cdn.dribbble.com/users/1761489/screenshots/4256457/media/0e7630c62abb314a89f15ccbe2ea6e52.gif" alt="rabbit sleeping">';
+            } else {
+                petElement.innerHTML = selectedPet;
+            }
+        }
+
+        function updateAttributes() {
+            hungerElement.textContent = hunger;
+            happinessElement.textContent = happiness;
+            energyElement.textContent = energy;
+        }
+        
+        function playPetSound() {
+            let sound;
+            switch (selectedPet) {
+                case '🐶':
+                    sound = document.getElementById('dogSound');
+                    break;
+                case '🐱':
+                    sound = document.getElementById('catSound');
+                    break;
+                case '🐰':
+                    sound = document.getElementById('rabbitSound');
+                    break;
+            }
+            if (sound) {
+                sound.currentTime = 0;  
+                sound.play();
+            }
+        }
+
+        function goToRoom(room) {
+            switch(room) {
+                case 'bedroom':
+                    sleep();
+                    break;
+                case 'park':
+                    play();
+                    break;
+                case 'kitchen':
+                    feed();
+                    break;
+            }
+        }
+
+        function sleep() {
+            messageElement.textContent = "Your pet is sleeping...";
+            isSleeping = true;
+            updatesleep();
+            setTimeout(() => {
+                energy = 100;
+                updateAttributes();
+                messageElement.textContent = "Your pet is fully rested!";
+                isSleeping = false;
+                updatesleep();
+            }, 60000); // 1 minute
+        }
+
+        function play() {
+            messageElement.textContent = "Your pet is playing in the park...";
+            isPlaying = true;
+            updatepark();
+            setTimeout(() => {
+                energy = Math.max(energy - 30, 0);
+                happiness = Math.min(happiness + 30, 100);
+                updateAttributes();
+                messageElement.textContent = "Your pet had fun but is a bit tired now!";
+                isPlaying = false;
+                updatepark();
+            }, 30000); // 30 seconds
+        }
+
+        function feed() {
+            messageElement.textContent = "Your pet is eating...";
+            isEating = true;
+            updatePetDisplay();
+            setTimeout(() => {
+                hunger = Math.max(hunger - 50, 0);
+                isEating = false;
+                updatePetDisplay();
+                updateAttributes();
+                messageElement.textContent = "Your pet is feeling much better after eating!";
+            }, 10000); // 10 seconds
+        }
+    </script>
+</body>
+</html>
